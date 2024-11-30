@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
 
 	import { goto, preloadData, pushState } from '$app/navigation'
 	import { page } from '$app/stores'
@@ -12,6 +11,7 @@
 
 	async function showModal(e: MouseEvent) {
 		// get URL
+		e.preventDefault()
 		const { href } = e.currentTarget as HTMLAnchorElement
 
 		// get result of `load` function
@@ -28,19 +28,20 @@
 	}
 
 	function closeModal() {
+		// console.log('closeModal')
 		history.back()
 	}
 </script>
 
-<Modal bind:modal on:close={closeModal}>
+<Modal bind:modal onclose={closeModal}>
 	{#if $page.state.selected}
 		<Image data={$page.state.selected} />
 	{/if}
-</Modal>
+</Modal>	
 
 <div class="feed">
 	{#each data.thumbnails as thumbnail}
-		<a onclick={preventDefault(showModal)} href="/photos/{thumbnail.id}">
+		<a onclick={showModal} href="/photos/{thumbnail.id}">
 			<img alt={thumbnail.alt} src={thumbnail.src} />
 		</a>
 	{/each}
