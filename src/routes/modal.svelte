@@ -1,9 +1,17 @@
 <script lang="ts">
-	export let modal: HTMLDialogElement
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+	interface Props {
+		modal: HTMLDialogElement;
+		children?: import('svelte').Snippet;
+	}
+
+	let { modal = $bindable(), children }: Props = $props();
 </script>
 
-<dialog bind:this={modal} on:close>
-	<slot />
+<dialog bind:this={modal} onclose={bubble('close')}>
+	{@render children?.()}
 </dialog>
 
 <style>

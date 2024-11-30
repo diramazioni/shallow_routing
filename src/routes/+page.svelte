@@ -1,12 +1,14 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { goto, preloadData, pushState } from '$app/navigation'
 	import { page } from '$app/stores'
 	import Modal from './modal.svelte'
 	import Image from './photos/[id]/+page.svelte'
 
-	export let data
+	let { data } = $props();
 
-	let modal: HTMLDialogElement
+	let modal: HTMLDialogElement = $state()
 
 	async function showModal(e: MouseEvent) {
 		// get URL
@@ -38,7 +40,7 @@
 
 <div class="feed">
 	{#each data.thumbnails as thumbnail}
-		<a on:click|preventDefault={showModal} href="/photos/{thumbnail.id}">
+		<a onclick={preventDefault(showModal)} href="/photos/{thumbnail.id}">
 			<img alt={thumbnail.alt} src={thumbnail.src} />
 		</a>
 	{/each}
